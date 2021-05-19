@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React, {useEffect, useState} from 'react';
+import Colors from '../../res/colors';
 import {
   View,
   Text,
@@ -14,10 +15,6 @@ const CoinsScreen = props => {
   [coins, setCoins] = useState([]);
   [loading, setLoanding] = useState(true);
 
-  const handlerPress = () => {
-    console.log('On press', props);
-    props.navigation.navigate('CoinDetail');
-  };
   useEffect(() => {
     const getData = async () => {
       const data = await Http.get('https://api.coinlore.net/api/tickers/');
@@ -28,7 +25,6 @@ const CoinsScreen = props => {
   }, []);
   return (
     <View style={style.container}>
-      <Text style={style.title}>Coins Screen</Text>
       {loading ? (
         <ActivityIndicator color="#fff" size="large" style={style.loader} />
       ) : null}
@@ -43,7 +39,7 @@ const CoinsScreen = props => {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.charade,
   },
   title: {
     color: '#fff',
