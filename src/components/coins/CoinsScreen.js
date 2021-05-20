@@ -1,13 +1,7 @@
 /* eslint-disable no-undef */
 import React, {useEffect, useState} from 'react';
 import Colors from '../../res/colors';
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-} from 'react-native';
+import {View, ActivityIndicator, FlatList, StyleSheet} from 'react-native';
 import Http from '../../lib/http';
 import CoinItem from './CoinItem';
 

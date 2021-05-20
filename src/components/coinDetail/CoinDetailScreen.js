@@ -1,10 +1,14 @@
 /* eslint-disable no-undef */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image, StyleSheet, SectionList} from 'react-native';
 import Colors from '../../res/colors';
+import Http from '../../lib/http';
+import {FlatList} from 'react-native-gesture-handler';
+import CoinMarket from './CoinMarket';
 
 const CoinDetailScreen = props => {
   [coin, setCoin] = useState(props.route.params.coin);
+  [markets, setMarkets] = useState([]);
 
   const getIconImage = () => {
     if (coin.name) {
@@ -30,6 +34,15 @@ const CoinDetailScreen = props => {
     ];
     return sections;
   };
+  const getMarkets = async coinId => {
+    const URL = `https://api.coinlore.net/api/coin/markets/?id=${coinId}`;
+    const data = await Http.get(URL);
+    setMarkets(data);
+  };
+
+  useEffect(() => {
+    getMarkets(coin.id);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -38,6 +51,7 @@ const CoinDetailScreen = props => {
         <Text style={styles.titleText}>Coin Detail Screen</Text>
       </View>
       <SectionList
+        style={styles.section}
         sections={getSections()}
         keyExtractor={item => item}
         renderItem={({item}) => (
@@ -50,6 +64,12 @@ const CoinDetailScreen = props => {
             <Text style={styles.sectionText}>{section.title}</Text>
           </View>
         )}
+      />
+      <Text style={styles.marketsText}>Markets</Text>
+      <FlatList
+        data={markets}
+        horizontal={true}
+        renderItem={({item}) => <CoinMarket item={item} />}
       />
     </View>
   );
@@ -89,6 +109,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  section: {
+    maxHeight: 250,
+  },
+  marketsText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    padding: 8,
+    fontSize: 14,
   },
 });
 export default CoinDetailScreen;
