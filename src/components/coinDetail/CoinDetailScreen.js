@@ -138,6 +138,7 @@ const CoinDetailScreen = props => {
       <FlatList
         data={markets}
         horizontal={true}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => <CoinMarket item={item} />}
       />
     </View>

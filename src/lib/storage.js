@@ -40,9 +40,8 @@ const getKeys = async () => {
   }
 };
 
-const getAll = async () => {
+const getAll = async keys => {
   try {
-    const keys = getKeys();
     const values = await AsyncStorage.multiGet(keys);
     return values;
   } catch (err) {
@@ -56,4 +55,5 @@ export default {
   storage,
   remove,
   getAll,
+  getKeys,
 };
