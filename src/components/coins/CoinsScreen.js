@@ -4,15 +4,18 @@ import Colors from '../../res/colors';
 import {View, ActivityIndicator, FlatList, StyleSheet} from 'react-native';
 import Http from '../../lib/http';
 import CoinItem from './CoinItem';
+import CoinsSearch from './coinsSearch';
 
 const CoinsScreen = props => {
   [coins, setCoins] = useState([]);
+  [allCoins, setAllCoins] = useState([]);
   [loading, setLoanding] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       const data = await Http.get('https://api.coinlore.net/api/tickers/');
       setCoins(data.data);
+      setAllCoins(data.data);
       setLoanding(false);
     };
     getData();
@@ -22,12 +25,26 @@ const CoinsScreen = props => {
     //console.log(props.navigation.navigate);
     props.navigation.navigate('CoinDetail', {coin});
   };
+  const handleSearch = text => {
+    if (text === '') {
+      setCoins(allCoins);
+    } else {
+      const coinsFiltered = coins.filter(item => {
+        return (
+          item.name.toLowerCase().includes(text.toLowerCase()) ||
+          item.symbol.toLowerCase().includes(text.toLowerCase())
+        );
+      });
+      setCoins(coinsFiltered);
+    }
+  };
 
   return (
     <View style={style.container}>
       {loading ? (
         <ActivityIndicator color="#fff" size="large" style={style.loader} />
       ) : null}
+      <CoinsSearch onChange={handleSearch} />
       <FlatList
         data={coins}
         renderItem={({item}) => (
